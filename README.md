@@ -3,7 +3,7 @@
 ## Turkcell e-Şirket e-Belge uygulamaları için .Net Client
 
 
-###Nuget Paketleri
+### Nuget Paketleri
 
 * [ePlatform.Api.Core](https://www.nuget.org/packages/ePlatform.Api.Core/)
     * Authentication ve diğer temel işlemler için gerekli olan paket
