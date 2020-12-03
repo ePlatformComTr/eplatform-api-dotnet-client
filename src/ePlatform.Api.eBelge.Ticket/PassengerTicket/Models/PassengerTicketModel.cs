@@ -25,6 +25,8 @@ namespace ePlatform.Api.eBelge.Ticket.PassengerTicket.Models
         public DateTime ExpeditionTime { get; set; }
         public string ExpeditionNumber { get; set; }
         public string VehicleOperatingVknTckn { get; set; }
+        public string VehicleOperatingTitle { get; set; }
+        public string VehicleOperatingAddress { get; set; }
         public string VehiclePlate { get; set; }
         public decimal? CommissionAmount { get; set; }
         public decimal? CommissionTaxAmount { get; set; }

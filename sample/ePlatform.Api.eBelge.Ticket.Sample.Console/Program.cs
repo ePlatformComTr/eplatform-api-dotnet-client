@@ -56,7 +56,7 @@ namespace ePlatform.Api.eBelge.Ticket.Sample.Console
             await PassengerTicketClientSampleOperations(passengerTicketClient);
 
             var commonEventTicketClient = new CommonTicketClient(clientOptions, clientFactory);
-            
+
             //Get city list
             var cityList = await commonEventTicketClient.GetCityList();
         }
@@ -198,6 +198,9 @@ namespace ePlatform.Api.eBelge.Ticket.Sample.Console
             passengerTicket.ExpeditionTime = DateTime.Now.AddDays(2);
             passengerTicket.ExpeditionNumber = "123";
             passengerTicket.DepartureLocation = "Sakarya";
+            passengerTicket.VehicleOperatingTitle = "Test";
+            passengerTicket.VehicleOperatingVknTckn = "12345678901";
+            passengerTicket.VehicleOperatingTaxCenter = "Test";
             return passengerTicket;
         }
         private static TicketBuilderModel CreateSampleTicketModel(TicketStatus status)
@@ -229,7 +232,7 @@ namespace ePlatform.Api.eBelge.Ticket.Sample.Console
                 PaymentDescription = "aa",
                 SeatNumber = "A34",
                 CommissionAmount = 10,
-                CommissionTaxAmount = 0,
+                CommissionTaxAmount = 10,
                 TicketLines = new List<TicketLine>
                 {
                     new TicketLine

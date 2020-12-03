@@ -173,7 +173,6 @@ namespace ePlatform.Api.eBelge.Ticket.Common.Models
         /// </summary>
         public string ExpeditionNumber { get; set; }
 
-
         /// <summary>
         /// Hareket zamanı.
         /// </summary>
@@ -193,6 +192,22 @@ namespace ePlatform.Api.eBelge.Ticket.Common.Models
         /// Aracı işleten VKN/TCKN.
         /// </summary>
         public string VehicleOperatingVknTckn { get; set; }
+
+        public string VehicleOperatingTitle { get; set; }
+        public string VehicleOperatingCountry { get; set; }
+        public string VehicleOperatingCity { get; set; }
+        public string VehicleOperatingDistrict { get; set; }
+        public string VehicleOperatingTown { get; set; }
+        public string VehicleOperatingStreet { get; set; }
+        public string VehicleOperatingBuildingName { get; set; }
+        public string VehicleOperatingBuildingNo { get; set; }
+        public string VehicleOperatingDoorNo { get; set; }
+        public string VehicleOperatingMersisNo { get; set; }
+        public string VehicleOperatingRegisterNo { get; set; }
+        public string VehicleOperatingPostCode { get; set; }
+        public string VehicleOperatingTelephone { get; set; }
+        public string VehicleOperatingEmail { get; set; }
+        public string VehicleOperatingTaxCenter { get; set; }
 
         /// <summary>
         /// Komisyon tutarı.
