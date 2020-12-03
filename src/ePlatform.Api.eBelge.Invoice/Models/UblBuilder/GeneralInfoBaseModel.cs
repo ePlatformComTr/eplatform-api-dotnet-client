@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 
 namespace ePlatform.Api.eBelge.Invoice.Models
 {
@@ -11,14 +11,14 @@ namespace ePlatform.Api.eBelge.Invoice.Models
         public string SlipNumber { get; set; }
         public InvoiceProfileType? InvoiceProfileType { get; set; }
         public DateTime IssueDate { get; set; }
+        public DateTime? IssueTime { get; set; }
+        public DateTime? DeliveryDate { get; set; }
         public InvoiceType Type { get; set; }
         public string ReturnInvoiceNumber { get; set; }
         public DateTime? ReturnInvoiceDate { get; set; }
         public long CurrencyId { get; set; }
         public string CurrencyCode { get; set; }
-        public Decimal ExchangeRate { get; set; }
-
-        //irsaliye
+        public decimal ExchangeRate { get; set; }
         public string DespatchNumber { get; set; }
         public DespatchAdviceType DespatchType { get; set; }
         public DespatchProfileType? DespatchProfileType { get; set; }

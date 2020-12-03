@@ -32,5 +32,6 @@ namespace ePlatform.Api.eBelge.Invoice.Models
         public byte? Type { get; set; }
         public byte? Status { get; set; }
         public DateTime? UpdatedDate { get; set; }
+        public bool IsSaveAddress { get; set; }
     }
 }

@@ -34,18 +34,18 @@ namespace ePlatform.Api.eBelge.Invoice.Sample.Controllers
             return Ok(await earchiveClient.Cancel(model));
         }
 
-        [HttpGet("list")]
-        public async Task<ActionResult<PagedList<OutboxInvoiceGetModel>>> GetList()
-        {
-            var model = new QueryFilterBuilder<OutboxInvoiceGetModel>()
-                .PageIndex(1)
-                .QueryFor(q => q.ExecutionDate, Operator.LessThan, DateTime.Now)
-                // .QueryFor(q => q.InvoiceNumber, Operator.Equal, "EPA2017000000009")
-                // .QueryFor(q => q.Status, Operator.Equal, InvoiceStatus.Error)
-                // .QueryFor(x => x.Id, Operator.Equal, "26284d90-2a2c-4b50-908a-5122da62646d")
-                .Build();
-            return await earchiveClient.Get(model);
-        }
+        // [HttpGet("list")]
+        // public async Task<ActionResult<PagedList<OutboxInvoiceGetModel>>> GetList()
+        // {
+        //     var model = new QueryFilterBuilder<OutboxInvoiceGetModel>()
+        //         .PageIndex(1)
+        //         .QueryFor(q => q.ExecutionDate, Operator.LessThan, DateTime.Now)
+        //         // .QueryFor(q => q.InvoiceNumber, Operator.Equal, "EPA2017000000009")
+        //         // .QueryFor(q => q.Status, Operator.Equal, InvoiceStatus.Error)
+        //         // .QueryFor(x => x.Id, Operator.Equal, "26284d90-2a2c-4b50-908a-5122da62646d")
+        //         .Build();
+        //     return await earchiveClient.Get(model);
+        // }
 
         [HttpGet("getmailddetail/{id}")] //e6f321ba-12c3-460b-87b3-04ac9887deb
         public async Task<ActionResult<List<EarsivInvoiceMailModel>>> GetMailDetail(string id)

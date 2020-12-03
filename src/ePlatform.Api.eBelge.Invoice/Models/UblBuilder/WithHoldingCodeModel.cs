@@ -1,4 +1,6 @@
-﻿namespace ePlatform.Api.eBelge.Invoice.Models
+﻿using System;
+
+namespace ePlatform.Api.eBelge.Invoice.Models
 {
     public partial class WithHoldingCodeModel
     {
@@ -7,5 +9,10 @@
         public string Value2 { get; set; }
         public int Rate { get; set; }
         public string Description { get; set; }
+        public bool IsEnabled { get; set; }
+        public DateTime CreatedDate { get; set; }
+        public int CreatedBy { get; set; }
+        public DateTime UpdatedDate { get; set; }
+        public int UpdatedBy { get; set; }
     }
 }

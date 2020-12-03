@@ -31,7 +31,7 @@ namespace ePlatform.Api.eBelge.Invoice.Models
         public bool SendEMail { get; set; }
         public string EMailAddress { get; set; }
         public List<EarsivInvoiceMailModel> EMailAddressList { get; set; }
-        public EarsivEmailStatusType EMailStatus { get; set; }
+        public EarsivEmailStatus EMailStatus { get; set; }
 
 
 

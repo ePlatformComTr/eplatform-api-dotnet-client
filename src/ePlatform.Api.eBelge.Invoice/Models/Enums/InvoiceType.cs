@@ -9,6 +9,7 @@ namespace ePlatform.Api.eBelge.Invoice.Models
         TEVKIFAT = 5,
         ARACTESCIL = 6,
         IHRACKAYITLI = 7,
-        SGK = 8
+        SGK = 8,
+        KOMISYONCU = 9
     }
 }

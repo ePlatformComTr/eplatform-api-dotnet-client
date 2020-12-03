@@ -1,5 +1,4 @@
-﻿using ePlatform.Api.Core;
-using ePlatform.Api.Core.Http;
+﻿using ePlatform.Api.Core.Http;
 using ePlatform.Api.eBelge.Invoice.Models;
 using Flurl.Http;
 using Flurl.Http.Configuration;
@@ -7,33 +6,19 @@ using Newtonsoft.Json;
 using System.Collections.Generic;
 using System.IO;
 using System.IO.Compression;
+using System.Reflection;
 using System.Threading.Tasks;
 
 namespace ePlatform.Api.eBelge.Invoice
 {
     public class CommonClient
     {
-        private readonly ClientOptions clientOptions;
         private readonly IFlurlClient flurlClient;
+        
         public CommonClient(ClientOptions clientOptions, IFlurlClientFactory flurlClientFac)
         {
-            this.clientOptions = clientOptions;
-            flurlClient = flurlClientFac.Get(this.clientOptions.InvoiceServiceUrl).SetDefaultSettings();
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <returns></returns>
-        public async Task<List<GibUserAliasModel>> GetUserAliasListZip()
-        {
-            using (var zipArcihve = new ZipArchive(await flurlClient.Request($"/v1/gibuser/receiverboxalias/zip").GetStreamAsync()))
-            using (var entry = zipArcihve.Entries[0].Open())
-            using (var sr = new StreamReader(entry))
-            using (var reader = new JsonTextReader(sr))
-            {
-                return new JsonSerializer().Deserialize<List<GibUserAliasModel>>(reader);
-            }
+            flurlClient = flurlClientFac.Get(clientOptions.InvoiceServiceUrl).SetDefaultSettings();
+            flurlClient.Headers["Client-Version"] = Assembly.GetExecutingAssembly().GetName().Version;
         }
 
         /// <summary>
@@ -56,14 +41,18 @@ namespace ePlatform.Api.eBelge.Invoice
         }
 
         /// <summary>
-        /// QueryFilter model:GibUserAliasModel
+        /// 
         /// </summary>
-        public async Task<PagedList<GibUserAliasModel>> GetUserAliasList(PagingModel model)
+        /// <returns></returns>
+        public async Task<List<GibUserAliasModel>> GetUserAliasListZip()
         {
-            var list = await flurlClient.Request($"/v1/gibuser/receiverboxaliaslist")
-                .SetQueryParams(model)
-                .GetJsonAsync<PagedList<GibUserAliasModel>>();
-            return list;
+            using (var zipArcihve = new ZipArchive(await flurlClient.Request($"/v1/gibuser/receiverboxalias/zip").GetStreamAsync()))
+            using (var entry = zipArcihve.Entries[0].Open())
+            using (var sr = new StreamReader(entry))
+            using (var reader = new JsonTextReader(sr))
+            {
+               return new JsonSerializer().Deserialize<List<GibUserAliasModel>>(reader);
+            }
         }
 
         public async Task<List<CurrencyModel>> CurrencyCodeList()

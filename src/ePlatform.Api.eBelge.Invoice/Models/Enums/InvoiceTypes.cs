@@ -1,8 +1,5 @@
 ﻿namespace ePlatform.Api.eBelge.Invoice.Models
 {
-    /// <summary>
-    /// 
-    /// </summary>
     public enum InvoiceTypes
     {
         /// <summary>
@@ -24,6 +21,18 @@
         /// <summary>
         ///e-Arşiv
         /// </summary>
-        EArchiveInvoice = 4
+        EArchiveInvoice = 4,
+        /// <summary>
+        /// KAGIT
+        /// </summary>
+        KAGIT = 5,
+        /// <summary>
+        /// HKS
+        /// </summary>
+        HKS = 6,
+        /// <summary>
+        /// EARSIVBELGE
+        /// </summary>
+        EARSIVBELGE = 7
     }
 }

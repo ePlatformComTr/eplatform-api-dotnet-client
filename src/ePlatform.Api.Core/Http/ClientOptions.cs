@@ -4,6 +4,7 @@
     {
         public string AuthServiceUrl { get; set; }
         public string InvoiceServiceUrl { get; set; }
+        public string TicketServiceUrl { get; set; }
         public AuthOption Auth { get; set; }
 
         public ClientOptions()

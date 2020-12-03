@@ -6,7 +6,7 @@ namespace ePlatform.Api.eBelge.Invoice.Models
     {
         public Guid Id { get; set; }
         public Guid InvoiceId { get; set; }
-        public InvoiceTaxType InvoiceTaxType { get; set; }
+        public InvoiceTaxModel InvoiceTaxType { get; set; }
         public decimal Assessment { get; set; }
         public string Code { get; set; }
         public decimal Amount { get; set; }

@@ -1,11 +1,10 @@
-using ePlatform.Api.eBelge.Invoice.Models;
 using System;
 
 namespace ePlatform.Api.eBelge.Invoice.Models
 {
     public class UblBuilderModel : BaseUblModel<GeneralInfoBaseModel, InvoiceLineBaseModel<InvoiceLineTaxBaseModel>, InvoiceLineTaxBaseModel,
-            InvoiceTotalsBaseModel, PaymentMeansBaseModel, PaymentTermsBaseModel, OrderInfoBaseModel, ArchiveInfoBaseModel,
-            RelatedDespatchBaseModel, BuyerCustomerInfoBaseModel, TaxRepresentativePartyInfoBaseModel>
+        InvoiceTotalsBaseModel, PaymentMeansBaseModel, PaymentTermsBaseModel, OrderInfoBaseModel, ArchiveInfoBaseModel,
+        RelatedDespatchBaseModel, BuyerCustomerInfoBaseModel, TaxRepresentativePartyInfoBaseModel, UblSettingsModel, AllowanceChargeModel>
     {
         public Guid InvoiceId { get; set; }
         public int Status { get; set; }
@@ -15,6 +14,5 @@ namespace ePlatform.Api.eBelge.Invoice.Models
         public bool UseManualInvoiceId { get; set; }
         public AddressBookModel AddressBook { get; set; }
         public EArsivInfoModel EArsivInfo { get; set; }
-
     }
 }

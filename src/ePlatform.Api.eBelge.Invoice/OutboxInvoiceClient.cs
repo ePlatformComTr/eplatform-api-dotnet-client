@@ -5,18 +5,21 @@ using Flurl.Http;
 using Flurl.Http.Configuration;
 using System;
 using System.IO;
+using System.Reflection;
 using System.Threading.Tasks;
 
 namespace ePlatform.Api.eBelge.Invoice
 {
     public class OutboxInvoiceClient
     {
-        private readonly ClientOptions clientOptions;
         private readonly IFlurlClient flurlClient;
 
         public UblBuilderModel NewOutboxInvoceModel()
         {
-            return new UblBuilderModel() { RecordType = (int)RecordType.Invoice, };
+            return new UblBuilderModel()
+            {
+                RecordType = (int)RecordType.Invoice,
+            };
         }
 
         public InvoiceLineBaseModel<InvoiceLineTaxBaseModel> NewInvoceLineModel()
@@ -26,14 +29,13 @@ namespace ePlatform.Api.eBelge.Invoice
 
         public OutboxInvoiceClient(ClientOptions clientOptions, IFlurlClientFactory flurlClientFac)
         {
-            this.clientOptions = clientOptions;
-            flurlClient = flurlClientFac.Get(this.clientOptions.InvoiceServiceUrl).SetDefaultSettings();
+            flurlClient = flurlClientFac.Get(clientOptions.InvoiceServiceUrl).SetDefaultSettings();
+            flurlClient.Headers["Client-Version"] = Assembly.GetExecutingAssembly().GetName().Version;
         }
 
         /// <summary>
         /// Faturanın özet bilgilerini çeker
         /// </summary>
-
         public async Task<OutboxInvoiceGetModel> Get(Guid id)
         {
             return await flurlClient.Request($"/v1/outboxinvoice/{id}")
@@ -94,13 +96,7 @@ namespace ePlatform.Api.eBelge.Invoice
                 .PutJsonAsync(model);
             return response.IsSuccessStatusCode;
         }
-
-        public async Task<bool> SendorRemoveArchiveList(UpdateInvoiceModel model)
-        {
-            var response = await flurlClient.Request($"/v1/outboxinvoice/sendorremovearchivelist")
-                .PutJsonAsync(model);
-            return response.IsSuccessStatusCode;
-        }
+        
 
         public async Task<Stream> GetUbl(Guid id)
         {
@@ -108,33 +104,23 @@ namespace ePlatform.Api.eBelge.Invoice
                 .GetStreamAsync();
         }
 
-        public async Task<Stream> GetUbl(Guid[] ids)
-        {
-            return await flurlClient.Request($"/v2/outboxinvoice/ubl")
-                .PostJsonAsync(new { Selected = ids })
-                .ReceiveStream();
-        }
-
-        public async Task<byte[]> GetUblList(InvoiceXmlModel model)
-        {
-            var response = await flurlClient.Request($"/v1/outboxinvoice/ubllist")
-                .PostJsonAsync(model)
-                .ReceiveBytes();
-            return response;
-        }
-
         public async Task<Stream> GetPdf(Guid id, bool useStandartXslt = false)
         {
             return await flurlClient.Request($"/v2/outboxinvoice/{id}/pdf/{useStandartXslt}")
-                 .GetStreamAsync();
+                .GetStreamAsync();
         }
 
-        public async Task<byte[]> GetPdfList(InvoicePdfModel model)
+        /// <summary>
+        /// Gets a ZIP of the outbox invoice with the given id value as a <see cref="Stream"/>.
+        /// </summary>
+        /// <param name="id">The id of the outbox invoice</param>
+        /// <param name="useStandardXslt">If this field is sent as false, then the invoice is returned according to the
+        /// default one among the XSLTs you have added. Otherwise, the standard XSLT ticket is returned.</param>
+        /// <returns>The task result contains the <see cref="Stream"/> object.</returns>
+        public async Task<Stream> GetZip(Guid id, bool useStandardXslt = false)
         {
-            var response = await flurlClient.Request($"/v1/outboxinvoice/pdflist")
-                .PostJsonAsync(model)
-                .ReceiveBytes();
-            return response;
+            return await flurlClient.Request($"/v2/outboxinvoice/{id}/zip/{useStandardXslt}")
+                .GetStreamAsync();
         }
 
         public async Task<Stream> GetHtml(Guid id, bool useStandartXslt = false)
@@ -142,41 +128,29 @@ namespace ePlatform.Api.eBelge.Invoice
             return await flurlClient.Request($"/v2/outboxinvoice/{id}/html/{useStandartXslt}")
                 .GetStreamAsync();
         }
-
-        public async Task<PagedList<AdditionalDocumentreferenceModel>> GetAdditionalDocumentList(Guid id, PagingModel model)
-        {
-            var response = await flurlClient.Request($"/v1/outboxinvoice/getadditionaldocumentlist/{id}")
-                .SetQueryParams(model)
-                .GetJsonAsync<PagedList<AdditionalDocumentreferenceModel>>();
-            return response;
-        }
-
-        public async Task<byte[]> DownloadAdditionalDocument(Guid id, string xsltId)
-        {
-            var response = await flurlClient.Request($"/v1/outboxinvoice/downloadadditionaldocument/{id}")
-                .SetQueryParam(xsltId)
-                .GetBytesAsync();
-            return response;
-        }
-
-        public async Task<bool> ResetInvoiceList(Guid[] ids)
-        {
-            var response = await flurlClient.Request($"/v1/outboxinvoice/resetinvoicelist")
-                .SetQueryParams(ids)
-                .GetAsync();
-            return response.IsSuccessStatusCode;
-        }
-
-        public async Task<OutboxInvoiceModel> GetWithEnvelopes(Guid id)
-        {
-            return await flurlClient.Request($"/v1/outboxinvoice/getwithenvelopes/{id}")
-                .GetJsonAsync<OutboxInvoiceModel>();
-        }
-
+        
         public async Task<ApproveRejectInvoiceModel> GetInvoiceResponse(Guid id)
         {
             return await flurlClient.Request($"/v1/invoiceresponse/getbyinvoiceid/{id}")
                 .GetJsonAsync<ApproveRejectInvoiceModel>();
+        }
+
+        /// <summary>
+        /// Gets the status of your outbox invoice on GIB side.
+        /// For e-Archive invoices, envelope information is not created.
+        /// </summary>
+        /// <param name="id">The id of the invoice</param>
+        /// <param name="isGibStatus">You must send this field as true to see the GIB status information.</param>
+        /// <returns>The task result contains the <see cref="OutboxEnvelopeModel"/> object.</returns>
+        public async Task<OutboxEnvelopeModel> GetInvoiceEnvelope(Guid id, bool isGibStatus)
+        {
+            return await flurlClient.Request($"/v1/outboxenvelope")
+                .SetQueryParams(new
+                {
+                    id,
+                    isGibStatus
+                })
+                .GetJsonAsync<OutboxEnvelopeModel>();
         }
     }
 }

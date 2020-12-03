@@ -130,10 +130,10 @@ namespace ePlatform.Api.eBelge.Invoice.Sample.Controllers
         //    return Ok(data);
         //}
 
-        [HttpGet("getwithenvelopes/{id}")] //B980FFE7-A6F0-4072-AACE-119CCB40A483
-        public async Task<ActionResult<OutboxInvoiceModel>> GetWithEnvelopes(Guid id)
-        {
-            return await _outboxInvoiceClient.GetWithEnvelopes(id);
-        }
+        // [HttpGet("getwithenvelopes/{id}")] //B980FFE7-A6F0-4072-AACE-119CCB40A483
+        // public async Task<ActionResult<OutboxInvoiceModel>> GetWithEnvelopes(Guid id)
+        // {
+        //     return await _outboxInvoiceClient.GetWithEnvelopes(id);
+        // }
     }
 }

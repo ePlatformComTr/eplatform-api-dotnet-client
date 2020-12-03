@@ -12,7 +12,12 @@ namespace ePlatform.Api.Core
     public class QueryFilterBuilder<T> where T : new()
     {
         public List<QueryFilter> Filters { get; private set; } = new List<QueryFilter>();
-        PagingModel model = new PagingModel() { PageIndex = 1, PageSize = 50 };
+
+        PagingModel model = new PagingModel()
+        {
+            PageIndex = 1,
+            PageSize = 50
+        };
 
 
         /// <summary>
@@ -32,17 +37,13 @@ namespace ePlatform.Api.Core
         /// </example>
         public QueryFilterBuilder<T> QueryFor<TProperty>(Expression<Func<T, TProperty>> expression, Operator @operator, object value)
         {
-
             MemberExpression memeberExpression = expression.Body as MemberExpression;
             object convertedObj = value;
 
-            if (typeof(TProperty) == typeof(DateTime))
+            if (typeof(TProperty) == typeof(DateTime) || typeof(TProperty) == typeof(DateTime?))
             {
-                if (value.GetType() == typeof(DateTime) ||
-                    value.GetType() == typeof(DateTime?))
-                {
+                if (value is DateTime)
                     convertedObj = Convert.ToDateTime(value).ToString("dd.MM.yyyy");
-                }
                 else
                     throw new Exception(memeberExpression.Member.Name + " value should be DateTime class");
             }

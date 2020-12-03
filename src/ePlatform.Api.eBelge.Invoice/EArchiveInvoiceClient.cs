@@ -1,21 +1,24 @@
-﻿using ePlatform.Api.Core;
-using ePlatform.Api.Core.Http;
+﻿using ePlatform.Api.Core.Http;
 using ePlatform.Api.eBelge.Invoice.Models;
 using Flurl.Http;
 using Flurl.Http.Configuration;
 using System;
 using System.Collections.Generic;
+using System.Reflection;
 using System.Threading.Tasks;
 
 namespace ePlatform.Api.eBelge.Invoice
 {
     public class EArchiveInvoiceClient
     {
-        private readonly ClientOptions clientOptions;
         private readonly IFlurlClient flurlClient;
+        
         public UblBuilderModel NewOutboxInvoceModel()
         {
-            return new UblBuilderModel() { RecordType = (int)RecordType.Invoice, };
+            return new UblBuilderModel()
+            {
+                RecordType = (int)RecordType.Invoice,
+            };
         }
         public InvoiceLineBaseModel<InvoiceLineTaxBaseModel> NewInvoceLineModel()
         {
@@ -23,8 +26,8 @@ namespace ePlatform.Api.eBelge.Invoice
         }
         public EArchiveInvoiceClient(ClientOptions clientOptions, IFlurlClientFactory flurlClientFac)
         {
-            this.clientOptions = clientOptions;
-            flurlClient = flurlClientFac.Get(this.clientOptions.InvoiceServiceUrl).SetDefaultSettings();
+            flurlClient = flurlClientFac.Get(clientOptions.InvoiceServiceUrl).SetDefaultSettings();
+            flurlClient.Headers["Client-Version"] = Assembly.GetExecutingAssembly().GetName().Version;
         }
 
         /// <summary>
@@ -34,17 +37,6 @@ namespace ePlatform.Api.eBelge.Invoice
         {
             return await flurlClient.Request($"/v1/earchive/{id}")
                 .GetJsonAsync<OutboxInvoiceGetModel>();
-        }
-
-        /// <summary>
-        /// Get Filtered Outbox Invoice
-        /// </summary>
-        public async Task<PagedList<OutboxInvoiceGetModel>> Get(PagingModel model)
-        {
-            var list = await flurlClient.Request($"/v1/earchive/list")
-                .SetQueryParams(model)
-                .GetJsonAsync<PagedList<OutboxInvoiceGetModel>>();
-            return list;
         }
 
         /// <summary>
@@ -71,10 +63,37 @@ namespace ePlatform.Api.eBelge.Invoice
                 .GetAsync();
         }
 
-        public async Task RetryInvoiceWithDifferentMail(Guid id, string mail)
+        public async Task<bool> RetryInvoiceWithDifferentMail(Guid id, string mail)
         {
-            await flurlClient.Request($"/v1/earchive/retryinvoicemail/{id}/{mail}")
-               .GetAsync();
+            var response = await flurlClient.Request($"/v1/earchive/retryinvoicemail/{id}/{mail}")
+                .PostAsync(null);
+            return response.IsSuccessStatusCode;
+        }
+
+        /// <summary>
+        /// Retries the e-mail sent for invoice or to send it to a new e-mail address.
+        /// </summary>
+        /// <param name="retryMailModel">Model for the selected invoice id and email addresses</param>
+        /// <returns>The task result contains the info about if the retry operation succeeds or not.</returns>
+        public async Task<bool> RetryInvoiceWithDifferentMails(RetryMailModel retryMailModel)
+        {
+            var response = await flurlClient.Request($"/v1/earchive/retryinvoicemail")
+                .SetQueryParams(retryMailModel)
+                .GetAsync();
+            return response.IsSuccessStatusCode;
+        }
+
+        /// <summary>
+        /// Updates the status of your wrong e-Archive invoices as draft The draft invoice can be arranged and sent again.
+        /// </summary>
+        /// <param name="ids">The ids of e-Archive invoices</param>
+        /// <returns>The task result contains the info about if the back to draft operation succeeds or not.</returns>
+        public async Task<bool> BackToDraft(List<Guid> ids)
+        {
+            var response = await flurlClient.Request($"/v1/earchive/backtodraft")
+                .SetQueryParams(new {ids})
+                .GetAsync();
+            return response.IsSuccessStatusCode;
         }
     }
 }

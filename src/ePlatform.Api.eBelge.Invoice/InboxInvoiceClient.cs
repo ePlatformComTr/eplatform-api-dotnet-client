@@ -5,6 +5,7 @@ using Flurl.Http.Configuration;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Reflection;
 using System.Threading.Tasks;
 using ePlatform.Api.eBelge.Invoice.Models;
 
@@ -12,13 +13,12 @@ namespace ePlatform.Api.eBelge.Invoice
 {
     public class InboxInvoiceClient
     {
-        private readonly ClientOptions clientOptions;
         private readonly IFlurlClient flurlClient;
 
         public InboxInvoiceClient(ClientOptions clientOptions, IFlurlClientFactory flurlClientFac)
         {
-            this.clientOptions = clientOptions;
-            flurlClient = flurlClientFac.Get(this.clientOptions.InvoiceServiceUrl).SetDefaultSettings();
+            flurlClient = flurlClientFac.Get(clientOptions.InvoiceServiceUrl).SetDefaultSettings();
+            flurlClient.Headers["Client-Version"] = Assembly.GetExecutingAssembly().GetName().Version;
         }
 
         public async Task<InboxInvoiceGetModel> Get(Guid id)
@@ -41,32 +41,6 @@ namespace ePlatform.Api.eBelge.Invoice
                 .GetJsonAsync<PagedList<InboxInvoiceGetModel>>();
         }
 
-        public async Task<InboxInvoiceModel> GetWithEnvelopes(Guid id)
-        {
-            return await flurlClient.Request($"/v1/inboxinvoice/getwithenvelopes/{id}")
-                .GetJsonAsync<InboxInvoiceModel>();
-        }
-
-        public async Task<List<InboxInvoiceModel>> GetInboxInvoicesByEnvelopeId(Guid envelopId)
-        {
-            return await flurlClient.Request($"/v1/inboxinvoice/getinvoicesbyenvelopeid/{envelopId}")
-                .GetJsonAsync<List<InboxInvoiceModel>>();
-        }
-
-        public async Task<bool> DeleteInboxInvoiceWithTaxes(Guid id)
-        {
-            var response = await flurlClient.Request($"/v1/inboxinvoice/deletewithtaxes/{id}")
-                .DeleteAsync();
-            return response.IsSuccessStatusCode;
-        }
-
-        public async Task<bool> SendOrRemoveArchive(UpdateInvoiceModel model)
-        {
-            var response = await flurlClient.Request($"/v1/inboxinvoice/sendorremovearchivelist")
-                .PutJsonAsync(model);
-            return response.IsSuccessStatusCode;
-        }
-
         public async Task<Stream> GetHtml(Guid id, bool useStandartXslt = false)
         {
             return await flurlClient.Request($"/v2/inboxinvoice/{id}/html/{useStandartXslt}")
@@ -79,10 +53,23 @@ namespace ePlatform.Api.eBelge.Invoice
                 .GetStreamAsync();
         }
 
+        /// <summary>
+        /// Gets a ZIP of the inbox invoice with the given id value as a <see cref="Stream"/>.
+        /// </summary>
+        /// <param name="id">The id of the inbox invoice</param>
+        /// <param name="useStandardXslt">If this field is sent as false, then the invoice is returned according to the
+        /// default one among the XSLTs you have added. Otherwise, the standard XSLT ticket is returned.</param>
+        /// <returns>The task result contains the <see cref="Stream"/> object.</returns>
+        public async Task<Stream> GetZip(Guid id, bool useStandardXslt = false)
+        {
+            return await flurlClient.Request($"/v2/inboxinvoice/{id}/zip/{useStandardXslt}")
+                .GetStreamAsync();
+        }
+
         public async Task<byte[]> GetPdfList(InvoicePdfModel model)
         {
             var reponse = await flurlClient.Request($"/v1/inboxinvoice/pdflist")
-            .PostJsonAsync(model);
+                .PostJsonAsync(model);
             return await reponse.Content.ReadAsByteArrayAsync();
         }
 
@@ -90,20 +77,6 @@ namespace ePlatform.Api.eBelge.Invoice
         {
             return await flurlClient.Request($"/v2/inboxinvoice/{id}/ubl")
                 .GetStreamAsync();
-        }
-
-        public async Task<Stream> GetUbl(Guid[] ids)
-        {
-            return await flurlClient.Request($"/v2/inboxinvoice/ubl")
-                .PostJsonAsync(new { Selected = ids })
-                .ReceiveStream();
-        }
-
-        public async Task<byte[]> GetUblList(Guid[] ids)
-        {
-            var reponse = await flurlClient.Request($"/v1/inboxinvoice/ubllist")
-            .PostJsonAsync(ids);
-            return await reponse.Content.ReadAsByteArrayAsync();
         }
 
         public async Task<ApproveRejectInvoiceModel> GetInvoiceResponse(Guid id)
@@ -118,6 +91,33 @@ namespace ePlatform.Api.eBelge.Invoice
                 .PostJsonAsync(model)
                 .ReceiveJson<DocumentResponseModel>();
             return reponseModel;
+        }
+
+        /// <summary>
+        /// Retry invoices that are in <see cref="InvoiceStatus.FailedApprove"/> or <see cref="InvoiceStatus.FailedDecline"/>
+        /// or <see cref="InvoiceStatus.FailedReturn"/> status.
+        /// </summary>
+        /// <param name="ids">Model for the selected invoice ids.</param>
+        /// <returns>The task result contains the info about if the retry operation succeeds or not.</returns>
+        public async Task<bool> RetryInvoices(List<Guid> ids)
+        {
+            var response = await flurlClient.Request($"/v1/invoiceresponse/retryinvoiceresponselist")
+                .PutJsonAsync(ids);
+            return response.IsSuccessStatusCode;
+        }
+
+        /// <summary>
+        /// Inbox invoices are saved to the system as <see cref="UpdateIsNewModel.IsNew"/> true. 
+        /// If you do not want to take again the invoices you have taken to your accounting / ERP program, 
+        /// you can update <see cref="UpdateIsNewModel.IsNew"/> to false.
+        /// </summary>
+        /// <param name="models">Models for the selected inbox invoice ids and their <see cref="UpdateIsNewModel.IsNew"/> status.</param>
+        /// <returns>The task result contains the numbers of updated invoices.</returns>
+        public async Task<int> UpdateIsNew(List<UpdateIsNewModel> models)
+        {
+            return await flurlClient.Request($"/v1/inboxinvoice/updateisnew")
+                .PutJsonAsync(models)
+                .ReceiveJson<int>();
         }
     }
 }

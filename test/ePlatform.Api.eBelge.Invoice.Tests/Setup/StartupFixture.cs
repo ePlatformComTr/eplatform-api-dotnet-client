@@ -1,6 +1,9 @@
-﻿using Microsoft.Extensions.Configuration;
+﻿using System;
+using ePlatform.Api.eBelge.Invoice.Models;
+using ePlatform.Api.eBelge.Invoice.Tests.Builders;
+using ePlatform.Api.eBelge.Invoice.Tests.Builders.Base;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using System;
 using Xunit;
 
 namespace ePlatform.Api.eBelge.Invoice.Tests
@@ -15,9 +18,12 @@ namespace ePlatform.Api.eBelge.Invoice.Tests
 
             var services = new ServiceCollection();
 
-            services.AddDistributedMemoryCache().AddePlatformClients(configuration);
+            services.AddDistributedMemoryCache().AddePlatformInvoiceClients(configuration);
 
-
+            services.AddScoped<UblBuilderModelBuilder>();
+            services.AddScoped<IBuilder<GeneralInfoBaseModel, GeneralInfoBaseModelBuilder>, GeneralInfoBaseModelBuilder>();
+            services.AddScoped<IBuilder<AddressBookModel, AddressBookModelBuilder>, AddressBookModelBuilder>();
+            services.AddScoped<IBuilder<InvoiceLineBaseModel<InvoiceLineTaxBaseModel>, InvoiceLineBaseModelBuilder>, InvoiceLineBaseModelBuilder>();
             ServiceProvider = services.BuildServiceProvider();
         }
     }

@@ -1,0 +1,37 @@
+﻿@model IEnumerable<ePlatform.Api.eBelge.Ticket.PassengerTicket.Models.PassengerTicketModel>
+
+@{
+    ViewBag.Title = "Passenger Tickets";
+}
+
+<h2>Passenger Tickets</h2>
+
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.TicketNumber)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.TotalAmount)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.TargetVknTckn)
+        </th>
+        <th></th>
+    </tr>
+
+    @foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.TicketNumber)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.TotalAmount)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.TargetVknTckn)
+            </td>
+        </tr>
+    }
+
+</table>

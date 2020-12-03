@@ -5,6 +5,7 @@ namespace ePlatform.Api.eBelge.Invoice.Models
     public class InboxInvoiceGetModel
     {
         public Guid Id { get; set; }
+        public Guid CustomerId { get; set; }
         public Guid? EnvelopeId { get; set; }
         public string InvoiceNumber { get; set; }
         public DateTime? ExecutionDate { get; set; }
@@ -24,6 +25,7 @@ namespace ePlatform.Api.eBelge.Invoice.Models
         public bool IsRead { get; set; }
         public bool IsVerified { get; set; }
         public DateTime CreatedDate { get; set; }
+        public string DigestValue { get; set; }
         public BaseEnvelopeGetModel Envelope { get; set; }
     }
 }

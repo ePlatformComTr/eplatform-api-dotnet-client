@@ -7,7 +7,6 @@ namespace ePlatform.Api.Core
     {
         public Dictionary<string, IEnumerable<string>> Details { get; }
 
-
         public EntityValidationException(Dictionary<string, IEnumerable<string>> details, string message, string correlationId) : base(message, correlationId)
         {
             Details = details;

@@ -70,7 +70,6 @@ namespace ePlatform.Api.Core.Http
                     {
                         throw new ePlatformException(await httpCall.Response.Content.ReadAsStringAsync(), correlationId, httpCall.Exception);
                     }
-
                 };
             });
         }

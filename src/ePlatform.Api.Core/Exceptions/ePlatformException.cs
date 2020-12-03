@@ -6,7 +6,7 @@ namespace ePlatform.Api.Core
 {
     public class ePlatformException : Exception
     {
-        public ePlatformException(string message, string correlationId) : base(message)
+        public ePlatformException(string message, string correlationId): base(message)
         {
             CorrelationId = correlationId;
         }

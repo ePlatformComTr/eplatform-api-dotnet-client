@@ -27,16 +27,16 @@ namespace ePlatform.Api.eBelge.Invoice.Sample.Controllers
         {
             return await commonClient.GetUser(id);
         }
-        [HttpGet("aliaslist")]
-        public async Task<ActionResult<PagedList<GibUserAliasModel>>> GetUserAliasList()
-        {
-            var model = new QueryFilterBuilder<GibUserAliasModel>()
-                .PageIndex(1)
-                .PageSize(50)
-                .QueryFor(q => q.IsActive, Operator.Equal, true)
-                .Build();
-            return await commonClient.GetUserAliasList(model);
-        }
+        // [HttpGet("aliaslist")]
+        // public async Task<ActionResult<PagedList<GibUserAliasModel>>> GetUserAliasList()
+        // {
+        //     var model = new QueryFilterBuilder<GibUserAliasModel>()
+        //         .PageIndex(1)
+        //         .PageSize(50)
+        //         .QueryFor(q => q.IsActive, Operator.Equal, true)
+        //         .Build();
+        //     return await commonClient.GetUserAliasList(model);
+        // }
         [HttpGet("currency")]
         public async Task<ActionResult<List<CurrencyModel>>> CurrencyCodeList()
         {

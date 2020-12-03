@@ -7,7 +7,7 @@ namespace ePlatform.Api.eBelge.Invoice.Models
         public Guid Id { get; set; }
         public Guid InvoiceId { get; set; }
         public string EmailAddress { get; set; }
-        public EarsivEmailStatusType EmailStatus { get; set; }
+        public int EmailStatus { get; set; }
         public int TryCount { get; set; }
         public DateTime? LastTryDate { get; set; }
         public DateTime? CreatedDate { get; set; }

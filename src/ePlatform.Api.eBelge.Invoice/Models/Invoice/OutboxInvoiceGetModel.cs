@@ -5,9 +5,10 @@ namespace ePlatform.Api.eBelge.Invoice.Models
     public class OutboxInvoiceGetModel
     {
         public Guid Id { get; set; }
+        public Guid CustomerId { get; set; }
         public Guid? EnvelopeId { get; set; }
         public string InvoiceNumber { get; set; }
-        public DateTime ExecutionDate { get; set; }
+        public DateTime? ExecutionDate { get; set; }
         public int Status { get; set; }
         public int Type { get; set; }
         public int TipType { get; set; }
@@ -27,6 +28,7 @@ namespace ePlatform.Api.eBelge.Invoice.Models
         public string Reason { get; set; }
         public string Prefix { get; set; }
         public DateTime CreatedDate { get; set; }
+        public string DigestValue { get; set; }
         public EArsivInvoiceGetModel EarsivInvoice { get; set; }
     }
 }

@@ -20,7 +20,22 @@ namespace ePlatform.Api.eBelge.Invoice.Sample.Mvc
         {
             var services = new ServiceCollection();
             services.AddDistributedMemoryCache(); //Token cache için gerekli
-            services.AddePlatformClients(clientOptions =>
+
+            // This usage is obsolete now in the next versions this method will be removed. Please use AddePlatformInvoiceClients instead.
+            // services.AddePlatformClients(clientOptions =>
+            // {
+            //     clientOptions.AuthServiceUrl = "https://coretest.isim360.com";
+            //     clientOptions.InvoiceServiceUrl = "https://efaturaservicetest.isim360.com";
+            //     clientOptions.Auth = new ClientOptions.AuthOption
+            //     {
+            //         ClientId = "serviceApi",
+            //         Username = "serviceuser01@isim360.com",
+            //         Password = "ePlatform123+"
+            //     };
+            // });
+
+            //Use this method to add invoice clients
+            services.AddePlatformInvoiceClients(clientOptions =>
             {
                 clientOptions.AuthServiceUrl = "https://coretest.isim360.com";
                 clientOptions.InvoiceServiceUrl = "https://efaturaservicetest.isim360.com";
