@@ -55,7 +55,7 @@ namespace ePlatform.Api.eBelge.Ticket.Tests.Functional
             Assert.Equal($"{ticketBuilderModel.CustomerFirstName} {ticketBuilderModel.CustomerLastName}", eventTicketModel.TargetTitle);
             Assert.Equal(ticketBuilderModel.Identifier, eventTicketModel.TargetVknTckn);
             Assert.NotNull(eventTicketModel.ExecutionDate);
-            Assert.Null(eventTicketModel.LocalReferenceId);
+            Assert.Equal(ticketBuilderModel.ReferenceNumber,eventTicketModel.LocalReferenceId);
             Assert.Equal(Currency.TRY.ToString(), eventTicketModel.Currency);
             Assert.Equal(ticketBuilderModel.ExchangeRate, eventTicketModel.CurrencyRate);
             Assert.Equal((int)ticketBuilderModel.DocumentType, eventTicketModel.DocumentType);
@@ -179,7 +179,7 @@ namespace ePlatform.Api.eBelge.Ticket.Tests.Functional
             Assert.Equal($"{ticketBuilderModel.CustomerFirstName} {ticketBuilderModel.CustomerLastName}", eventTicketModel.TargetTitle);
             Assert.Equal(ticketBuilderModel.Identifier, eventTicketModel.TargetVknTckn);
             Assert.NotNull(eventTicketModel.ExecutionDate);
-            Assert.Null(eventTicketModel.LocalReferenceId);
+            Assert.Equal(ticketBuilderModel.ReferenceNumber,eventTicketModel.LocalReferenceId);
             Assert.Equal(Currency.TRY.ToString(), eventTicketModel.Currency);
             Assert.Equal(ticketBuilderModel.ExchangeRate, eventTicketModel.CurrencyRate);
             Assert.Equal((int)ticketBuilderModel.DocumentType, eventTicketModel.DocumentType);

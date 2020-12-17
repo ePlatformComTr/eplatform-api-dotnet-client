@@ -77,7 +77,7 @@ namespace ePlatform.Api.eBelge.Ticket.Tests.Builders
         public TicketBuilderModelBuilder CreateWithDefaultPassengerTicketValues()
         {
             var passengerTicket = CreateWithDefaultValues()
-                .With(et => et.TicketType = TicketType.OTOBUS)
+                .With(et => et.TicketType = TicketType.YOLCU)
                 .With(et => et.VehiclePlate = "34ABC34")
                 .With(et => et.DepartureDate = DateTime.Now.AddDays(2))
                 .With(et => et.ExpeditionTime = DateTime.Now.AddDays(2))

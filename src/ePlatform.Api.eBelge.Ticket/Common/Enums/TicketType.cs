@@ -5,7 +5,7 @@
     /// </summary>
     public enum TicketType
     {
-        OTOBUS,
+        YOLCU,
         ETKINLIK
     }
 }

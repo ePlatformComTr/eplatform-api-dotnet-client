@@ -192,7 +192,7 @@ namespace ePlatform.Api.eBelge.Ticket.Sample.Console
         private static TicketBuilderModel CreateSamplePassengerTicketModel(TicketStatus status)
         {
             var passengerTicket = CreateSampleTicketModel(status);
-            passengerTicket.TicketType = TicketType.OTOBUS;
+            passengerTicket.TicketType = TicketType.YOLCU;
             passengerTicket.VehiclePlate = "34ABC34";
             passengerTicket.DepartureDate = DateTime.Now.AddDays(2);
             passengerTicket.ExpeditionTime = DateTime.Now.AddDays(2);
